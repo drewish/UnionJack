@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<cinder>
+  <block
+    name="UnionJack"
+    id="com.drewish.unionjack"
+    author="andrew morton"
+    license="BSD"
+    summary="CinderBlock for drawing 16-segment displays using OpenGL"
+    git="https://github.com/drewish/UnionJack.git"
+    version="0.1.0"
+    >
+    <includePath>include</includePath>
+    <header>include/UnionJack.h</header>
+    <source>src/UnionJack.cpp</source>
+  </block>
+</cinder>
