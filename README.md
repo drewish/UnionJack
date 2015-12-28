@@ -1,5 +1,5 @@
 # UnionJack
-CinderBlock for drawing a 16-segment display using OpenGL
+CinderBlock for emmulating a 16-segment LED display using OpenGL.
 
 ![Screenshot](PREVIEW.png)
 
@@ -7,9 +7,9 @@ CinderBlock for drawing a 16-segment display using OpenGL
 
 Download or check out this repoistory into your `Cinder/blocks` directory, then
 use [Tinderbox](https://libcinder.org/docs/guides/tinderbox/) to create a new
-project using UnionJack
+project using UnionJack.
 
-## Usage
+## Example
 
 ```c++
 #include "cinder/app/App.h"
@@ -68,3 +68,6 @@ void CinderProjectApp::draw()
 
 CINDER_APP( CinderProjectApp, RendererGl( RendererGl::Options().msaa( 16 ) ) )
 ```.
+
+## Credit
+- The font is taken from Matthew Sarnoff's [32-character serial led display](http://www.msarnoff.org/alpha32/)
