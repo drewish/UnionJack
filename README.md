@@ -24,7 +24,6 @@ using namespace std;
 class CinderProjectApp : public App {
 public:
     void setup() override;
-    void update() override;
     void draw() override;
 
     vector<UnionJack> mDisplays;
@@ -34,15 +33,15 @@ void CinderProjectApp::setup()
 {
     Color light = Color8u::hex( 0x42a1eb );
     Color dark = Color8u::hex( 0x082f4d );
-    vec2 padding( 10 );
+    vec2 padding( 20 );
 
-    // Create a few displays with our name and a complete font specimen.
     mDisplays = {
         UnionJack( 11 ).display( "UnionJack *" ).scale( 3 ).position( padding )
-            .slant( 0.1 ).colors( Color8u::hex( 0xf00000 ), Color8u::hex( 0x530000 ) ),
-        UnionJack( 33 ).display( "!\"#$%&'()*+,-./0123456789:;<=>?  " ).colors( light, dark ),
-        UnionJack( 33 ).display( "@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_ " ).colors( light, dark ),
-        UnionJack( 33 ).display( "`abcdefghijklmnopqrstuvwxyz{|}~   " ).colors( light, dark ),
+            .colors( Color8u::hex( 0xf00000 ), Color8u::hex( 0x530000 ) ),
+        // Let's print out the full ASCII table as a font specimen
+        UnionJack( 33 ).display( " !\"#$%&'()*+,-./0123456789:;<=>?"   ).colors( light, dark ),
+        UnionJack( 33 ).display( "@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_"   ).colors( light, dark ),
+        UnionJack( 33 ).display( "`abcdefghijklmnopqrstuvwxyz{|}~\x7F" ).colors( light, dark ),
     };
     // Position the displays relative to each other.
     mDisplays[1].below( mDisplays[0] );
@@ -50,10 +49,6 @@ void CinderProjectApp::setup()
     mDisplays[3].below( mDisplays[2] );
 
     setWindowSize( padding + mDisplays[3].calcBoundingBox().getLowerRight() );
-}
-
-void CinderProjectApp::update()
-{
 }
 
 void CinderProjectApp::draw()
@@ -64,7 +59,12 @@ void CinderProjectApp::draw()
     }
 }
 
-CINDER_APP( CinderProjectApp, RendererGl( RendererGl::Options().msaa( 16 ) ) )
+void prepareSettings( App::Settings *settings )
+{
+    settings->setHighDensityDisplayEnabled();
+}
+
+CINDER_APP( CinderProjectApp, RendererGl( RendererGl::Options().msaa( 16 ) ), prepareSettings )
 ```
 
 ## Credit
