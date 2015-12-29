@@ -319,7 +319,7 @@ float UnionJack::height() const
 
 float UnionJack::width() const
 {
-    return ( DISPLAY_DIMENSIONS.x * mLength ) * mScale;
+    return ( ( DISPLAY_DIMENSIONS.x * mLength ) + ( DISPLAY_DIMENSIONS.y * mSlant ) ) * mScale;
 }
 
 void UnionJack::draw() const
