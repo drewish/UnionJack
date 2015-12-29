@@ -22,52 +22,50 @@ using namespace ci::app;
 using namespace std;
 
 class CinderProjectApp : public App {
-  public:
+public:
     void setup() override;
     void update() override;
     void draw() override;
 
-    UnionJack mDisplay1;
-    UnionJack mDisplay2;
+    vector<UnionJack> mDisplays;
 };
 
 void CinderProjectApp::setup()
 {
-    Color light = Color8u::hex(0x42a1eb);
-    Color dark = Color8u::hex(0x1a3e5a);
+    Color light = Color8u::hex( 0x42a1eb );
+    Color dark = Color8u::hex( 0x082f4d );
+    vec2 padding( 10 );
 
-    mDisplay1 = UnionJack( 12 )
-        .position( vec2( 10 ) )
-        .scale( 4 )
-        .display( "Union Jack *" )
-        .colors( light, dark );
-    mDisplay2 = UnionJack( 48 )
-        .below( mDisplay1 )
-        .colors( light, dark );
-    console() << mDisplay1.width();
-    console() << mDisplay2.width();
+    // Create a few displays with our name and a complete font specimen.
+    mDisplays = {
+        UnionJack( 11 ).display( "UnionJack *" ).scale( 3 ).position( padding )
+            .slant( 0.1 ).colors( Color8u::hex( 0xf00000 ), Color8u::hex( 0x530000 ) ),
+        UnionJack( 33 ).display( "!\"#$%&'()*+,-./0123456789:;<=>?  " ).colors( light, dark ),
+        UnionJack( 33 ).display( "@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_ " ).colors( light, dark ),
+        UnionJack( 33 ).display( "`abcdefghijklmnopqrstuvwxyz{|}~   " ).colors( light, dark ),
+    };
+    // Position the displays relative to each other.
+    mDisplays[1].below( mDisplays[0] );
+    mDisplays[2].below( mDisplays[1] );
+    mDisplays[3].below( mDisplays[2] );
 
-    setWindowSize( 800, 140 );
+    setWindowSize( padding + mDisplays[3].calcBoundingBox().getLowerRight() );
 }
 
 void CinderProjectApp::update()
 {
-    mDisplay2.display(
-        std::to_string( getWindowWidth() ) + "x" +
-        std::to_string( getWindowHeight() ) + " " +
-        std::to_string( getElapsedSeconds() ) + " secs"
-    );
 }
 
 void CinderProjectApp::draw()
 {
     gl::clear( Color::black() );
-    mDisplay1.draw();
-    mDisplay2.draw();
+    for ( auto display = mDisplays.begin(); display != mDisplays.end(); ++display ) {
+        display->draw();
+    }
 }
 
 CINDER_APP( CinderProjectApp, RendererGl( RendererGl::Options().msaa( 16 ) ) )
 ```
 
 ## Credit
-- The font is taken from Matthew Sarnoff's [32-character serial led display](http://www.msarnoff.org/alpha32/)
+- The font is from Matthew Sarnoff's [32-character serial LED display](http://www.msarnoff.org/alpha32/) project.
