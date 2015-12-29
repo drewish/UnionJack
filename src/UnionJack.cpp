@@ -322,6 +322,11 @@ float UnionJack::width() const
     return ( ( DISPLAY_DIMENSIONS.x * mLength ) + ( DISPLAY_DIMENSIONS.y * mSlant ) ) * mScale;
 }
 
+Rectf UnionJack::calcBoundingBox() const
+{
+    return Rectf( mPosition, mPosition + vec2( width(), height() ) );
+}
+
 void UnionJack::draw() const
 {
     gl::ScopedModelMatrix matrixScope;

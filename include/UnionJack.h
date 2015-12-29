@@ -38,9 +38,10 @@ public:
 
     void draw() const;
 
-    const vec2 position() const { return mPosition; }
-    float height() const;
-    float width() const;
+    const vec2  position() const { return mPosition; }
+    float       height() const;
+    float       width() const;
+    Rectf       calcBoundingBox() const;
 
     // Returns the pattern for a printable ASCII character (33-127) in our font.
     // Out of range values return blank.
