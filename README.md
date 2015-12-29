@@ -67,7 +67,7 @@ void CinderProjectApp::draw()
 }
 
 CINDER_APP( CinderProjectApp, RendererGl( RendererGl::Options().msaa( 16 ) ) )
-```.
+```
 
 ## Credit
 - The font is taken from Matthew Sarnoff's [32-character serial led display](http://www.msarnoff.org/alpha32/)
