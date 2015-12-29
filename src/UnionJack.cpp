@@ -202,19 +202,6 @@ UnionJack& UnionJack::colors( const ColorA &on, const ColorA &off )
 
 void UnionJack::setup()
 {
-    // TODO: would be nice to avoid calling the copy constructor here
-    vector<vec3> verts(DISPLAY_VERTS);
-    // If there's a slant apply it.
-    if ( mSlant != 0.0) {
-        // We want to shear from the baseline of the text rather than the top so
-        // move the text up perform the shear, then put it back.
-        vec2 offset = vec2( 0, DISPLAY_DIMENSIONS.y );
-        mat3 transform = translate( shearY( translate( mat3(), offset ), -mSlant ), -offset );
-        for ( auto v = verts.begin(); v != verts.end(); ++v ) {
-            *v = transform * *v;
-        }
-    }
-
     // Group the verts in each segment using the bone index so the shader knows
     // how to color them.
     vector<int> segmentBones;
@@ -228,8 +215,8 @@ void UnionJack::setup()
         gl::VboMesh::Layout().usage( GL_STATIC_DRAW ).attrib( geom::Attrib::POSITION, 3 ),
         gl::VboMesh::Layout().usage( GL_STATIC_DRAW ).attrib( geom::AttribInfo( geom::Attrib::BONE_INDEX, DataType::INTEGER, 1, 0, 0, 0 ) ),
     };
-    gl::VboMeshRef mesh = gl::VboMesh::create( verts.size(), GL_TRIANGLES, bufferLayout );
-    mesh->bufferAttrib( geom::Attrib::POSITION, verts );
+    gl::VboMeshRef mesh = gl::VboMesh::create( DISPLAY_VERTS.size(), GL_TRIANGLES, bufferLayout );
+    mesh->bufferAttrib( geom::Attrib::POSITION, DISPLAY_VERTS );
     mesh->bufferAttrib( geom::Attrib::BONE_INDEX, segmentBones );
 
     std::vector<vec3> characterPosition;
@@ -334,12 +321,26 @@ float UnionJack::width() const
 void UnionJack::draw() const
 {
     gl::ScopedModelMatrix matrixScope;
-
-    gl::translate( mPosition );
-    gl::scale( vec2( mScale ) );
+    gl::multModelMatrix( modelMatrix() );
 
     mBatch->getGlslProg()->uniform( "offColor", mOffColor );
     mBatch->getGlslProg()->uniform( "onColor", mOnColor );
-
     mBatch->drawInstanced( mDigits );
+}
+
+mat4 UnionJack::modelMatrix() const
+{
+    mat3 matrix = mat3();
+    matrix = translate( matrix, mPosition );
+    matrix = glm::scale( matrix, vec2( mScale ) );
+    // If there's a slant apply it.
+    if ( mSlant != 0.0f ) {
+        // Positive slants (to the right) shift the bottom over across our left
+        // side so we need to shif everthing over first.
+        if ( mSlant > 0.0f ) {
+            matrix = translate( matrix, vec2( DISPLAY_DIMENSIONS.y * mSlant, 0 ) );
+        }
+        matrix = shearY( matrix, -mSlant );
+    }
+    return mat4( matrix );
 }

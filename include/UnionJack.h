@@ -45,6 +45,7 @@ public:
 
 protected:
     void setup();
+    mat4 modelMatrix() const;
 
     uint            mDigits; // Number of characters in display
     ci::vec2        mPosition;
