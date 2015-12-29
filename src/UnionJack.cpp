@@ -158,8 +158,8 @@ static const ci::vec2 DISPLAY_DIMENSIONS = ci::vec2( 16, 24 );
 static const uint SEGMENTS = 16;
 static const uint VERTS_PER_SEGMENT = 12;
 
-UnionJack::UnionJack( uint digits, float slant )
-    : mDigits( digits ), mSlant( slant )
+UnionJack::UnionJack( uint length )
+    : mDigits( length )
 {
     mPosition = ci::vec2();
     mScale = 1.0;
@@ -184,6 +184,12 @@ UnionJack& UnionJack::below( const UnionJack &other )
 UnionJack& UnionJack::rightOf( const UnionJack &other )
 {
     mPosition = other.mPosition + vec2( other.width(), other.height() - height() );
+    return *this;
+}
+
+UnionJack& UnionJack::slant( const float &s )
+{
+    mSlant = s;
     return *this;
 }
 

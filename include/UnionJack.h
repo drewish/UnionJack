@@ -16,7 +16,7 @@ using namespace std;
 
 class UnionJack {
 public:
-    UnionJack( uint digits = 10, float slant = 0.2f );
+    UnionJack( uint length = 10 );
 
     // Set the xy position.
     UnionJack& position( const vec2 &p );
@@ -24,6 +24,9 @@ public:
     UnionJack& below( const UnionJack &other );
     // Set the xy position to be right of another display.
     UnionJack& rightOf( const UnionJack &other );
+
+    // Applies a slant factor. Positive is to the right, negative to the left.
+    UnionJack& slant( const float &s );
     // Scale display. The default character size is 16 x 24.
     UnionJack& scale( const float &s );
     // Set the on and off colors.
