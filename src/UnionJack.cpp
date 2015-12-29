@@ -238,10 +238,10 @@ void UnionJack::setup()
     instanceColorLayout.append( geom::Attrib::CUSTOM_0, 1, 0, 0, 1 /* per instance */ );
     mesh->appendVbo( instanceColorLayout, mInstanceValueVbo );
 
-    mInstancePositionVbo = gl::Vbo::create( GL_ARRAY_BUFFER, characterPosition.size() * sizeof( vec3 ), characterPosition.data(), GL_STATIC_DRAW );
+    gl::VboRef instancePositionVbo = gl::Vbo::create( GL_ARRAY_BUFFER, characterPosition.size() * sizeof( vec3 ), characterPosition.data(), GL_STATIC_DRAW );
     geom::BufferLayout instancePositionLayout;
     instancePositionLayout.append( geom::Attrib::CUSTOM_1, 3, 0, 0, 1 /* per instance */ );
-    mesh->appendVbo( instancePositionLayout, mInstancePositionVbo );
+    mesh->appendVbo( instancePositionLayout, instancePositionVbo );
 
     auto shader = gl::GlslProg::create( gl::GlslProg::Format()
         .vertex(    CI_GLSL( 150,

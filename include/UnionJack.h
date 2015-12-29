@@ -55,7 +55,6 @@ protected:
     ci::vec4        mOnColor;
     ci::vec4        mOffColor;
     ci::gl::BatchRef    mBatch;
-    ci::gl::VboRef      mInstancePositionVbo;
     ci::gl::VboRef      mInstanceValueVbo;
 };
 
