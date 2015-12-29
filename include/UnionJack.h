@@ -11,15 +11,12 @@
 
 #include "cinder/gl/Vbo.h"
 
-using namespace ci;
-using namespace std;
-
 class UnionJack {
 public:
     UnionJack( uint length = 10 );
 
     // Set the xy position.
-    UnionJack& position( const vec2 &p );
+    UnionJack& position( const ci::vec2 &p );
     // Set the xy position to be below another display.
     UnionJack& below( const UnionJack &other );
     // Set the xy position to be right of another display.
@@ -30,26 +27,26 @@ public:
     // Scale display. The default character size is 16 x 24.
     UnionJack& scale( const float &s );
     // Set the on and off colors.
-    UnionJack& colors( const ColorA &on, const ColorA &off );
+    UnionJack& colors( const ci::ColorA &on, const ci::ColorA &off );
     // Set the text to display. Strings longer than the display size will be
     // truncated. Strings shorter than the display size will be padded with
     // spaces.
-    UnionJack& display( string s );
+    UnionJack& display( std::string s );
 
     void draw() const;
 
-    const vec2  position() const { return mPosition; }
+    ci::vec2    position() const { return mPosition; }
     float       height() const;
     float       width() const;
-    Rectf       calcBoundingBox() const;
+    ci::Rectf   calcBoundingBox() const;
 
     // Returns the pattern for a printable ASCII character (33-127) in our font.
     // Out of range values return blank.
     uint16_t valueOf( const char );
 
 protected:
-    void setup();
-    mat4 modelMatrix() const;
+    void        setup();
+    ci::mat4    modelMatrix() const;
 
     uint            mLength; // Number of characters in display
     ci::vec2        mPosition = ci::vec2();
@@ -57,9 +54,9 @@ protected:
     float           mSlant = 0.2f;
     ci::vec4        mOnColor;
     ci::vec4        mOffColor;
-    gl::BatchRef    mBatch;
-    gl::VboRef      mInstancePositionVbo;
-    gl::VboRef      mInstanceValueVbo;
+    ci::gl::BatchRef    mBatch;
+    ci::gl::VboRef      mInstancePositionVbo;
+    ci::gl::VboRef      mInstanceValueVbo;
 };
 
 #endif /* defined(__UnionJack__) */
