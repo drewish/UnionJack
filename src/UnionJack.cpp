@@ -159,10 +159,8 @@ static const uint SEGMENTS = 16;
 static const uint VERTS_PER_SEGMENT = 12;
 
 UnionJack::UnionJack( uint length )
-    : mDigits( length )
+    : mLength( length )
 {
-    mPosition = ci::vec2();
-    mScale = 1.0;
     mOnColor = vec4( 1, 0, 0, 1 );
     mOffColor = vec4( 0.25, 0, 0, 1 );
 
@@ -228,7 +226,7 @@ void UnionJack::setup()
     std::vector<vec3> characterPosition;
     std::vector<int> segmentValue;
 
-    for ( uint d = 0; d < mDigits; ++d ) {
+    for ( uint d = 0; d < mLength; ++d ) {
         characterPosition.push_back( vec3( DISPLAY_DIMENSIONS.x * d, 0, 0 ) );
         segmentValue.push_back( 0 );
     }
@@ -294,7 +292,7 @@ void UnionJack::setup()
 UnionJack& UnionJack::display( string s )
 {
     int *value = (int*)mInstanceValueVbo->mapReplace();
-    for ( uint d = 0, len = s.length(); d < mDigits; ++d ) {
+    for ( uint d = 0, len = s.length(); d < mLength; ++d ) {
         // When we get to the end of the input, keep going and blank out the
         // rest of the display.
         *value++ = valueOf( d < len ? s[d] : ' ' );
@@ -321,7 +319,7 @@ float UnionJack::height() const
 
 float UnionJack::width() const
 {
-    return ( DISPLAY_DIMENSIONS.x * mDigits ) * mScale;
+    return ( DISPLAY_DIMENSIONS.x * mLength ) * mScale;
 }
 
 void UnionJack::draw() const
@@ -331,7 +329,7 @@ void UnionJack::draw() const
 
     mBatch->getGlslProg()->uniform( "offColor", mOffColor );
     mBatch->getGlslProg()->uniform( "onColor", mOnColor );
-    mBatch->drawInstanced( mDigits );
+    mBatch->drawInstanced( mLength );
 }
 
 mat4 UnionJack::modelMatrix() const

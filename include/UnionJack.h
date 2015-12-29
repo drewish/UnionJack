@@ -50,10 +50,10 @@ protected:
     void setup();
     mat4 modelMatrix() const;
 
-    uint            mDigits; // Number of characters in display
-    ci::vec2        mPosition;
-    float           mScale;
-    float           mSlant; // Positive leans right, negative leans left
+    uint            mLength; // Number of characters in display
+    ci::vec2        mPosition = ci::vec2();
+    float           mScale = 1.0f;
+    float           mSlant = 0.2f;
     ci::vec4        mOnColor;
     ci::vec4        mOffColor;
     gl::BatchRef    mBatch;
