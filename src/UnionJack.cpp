@@ -154,7 +154,6 @@ static const vector<vec3> DISPLAY_VERTS = {
     vec3( 2, 17.7, 1 ), vec3( 6, 14.8, 1 ),  vec3( 5.3, 12, 1 ),
     vec3( 6, 14.8, 1 ), vec3( 5.3, 12, 1 ),  vec3( 6, 12, 1 ),
 };
-static const ci::vec2 DISPLAY_DIMENSIONS = ci::vec2( 16, 24 );
 static const uint SEGMENTS = 16;
 static const uint VERTS_PER_SEGMENT = 12;
 
@@ -227,7 +226,7 @@ void UnionJack::setup()
     std::vector<int> segmentValue;
 
     for ( uint d = 0; d < mLength; ++d ) {
-        characterPosition.push_back( vec3( DISPLAY_DIMENSIONS.x * d, 0, 0 ) );
+        characterPosition.push_back( vec3( CHARACTER_WIDTH * d, 0, 0 ) );
         segmentValue.push_back( 0 );
     }
 
@@ -314,12 +313,12 @@ uint16_t UnionJack::valueOf( const char input )
 
 float UnionJack::height() const
 {
-    return DISPLAY_DIMENSIONS.y * mScale;
+    return CHARACTER_HEIGTH * mScale;
 }
 
 float UnionJack::width() const
 {
-    return ( ( DISPLAY_DIMENSIONS.x * mLength ) + ( DISPLAY_DIMENSIONS.y * mSlant ) ) * mScale;
+    return ( ( CHARACTER_WIDTH * mLength ) + ( CHARACTER_HEIGTH * mSlant ) ) * mScale;
 }
 
 Rectf UnionJack::calcBoundingBox() const
@@ -347,7 +346,7 @@ mat4 UnionJack::modelMatrix() const
         // Positive slants (to the right) shift the bottom over across our left
         // side so we need to shif everthing over first.
         if ( mSlant > 0.0f ) {
-            matrix = translate( matrix, vec2( DISPLAY_DIMENSIONS.y * mSlant, 0 ) );
+            matrix = translate( matrix, vec2( CHARACTER_HEIGTH * mSlant, 0 ) );
         }
         matrix = shearY( matrix, -mSlant );
     }

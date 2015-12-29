@@ -17,9 +17,9 @@ public:
 
     // Set the xy position.
     UnionJack& position( const ci::vec2 &p );
-    // Set the xy position to be below another display.
+    // Set the xy position to be left aligned below another display.
     UnionJack& below( const UnionJack &other );
-    // Set the xy position to be right of another display.
+    // Set the xy position to be bottom aligned, right of another display.
     UnionJack& rightOf( const UnionJack &other );
 
     // Applies a slant factor. Positive is to the right, negative to the left.
@@ -43,6 +43,10 @@ public:
     // Returns the pattern for a printable ASCII character (33-127) in our font.
     // Out of range values return blank.
     uint16_t valueOf( const char );
+
+    // Character dimensions before scaling or slanting.
+    static const uint CHARACTER_HEIGTH = 24;
+    static const uint CHARACTER_WIDTH = 16;
 
 protected:
     void        setup();
