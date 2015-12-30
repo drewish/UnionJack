@@ -1,5 +1,5 @@
 # UnionJack
-CinderBlock for emmulating a 16-segment LED display using OpenGL.
+CinderBlock for emulating a 16-segment LED display using OpenGL.
 
 ![Screenshot](PREVIEW.png)
 
