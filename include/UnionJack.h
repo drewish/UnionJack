@@ -9,11 +9,12 @@
 #ifndef __UnionJack__
 #define __UnionJack__
 
+#include "cinder/gl/gl.h"
 #include "cinder/gl/Vbo.h"
 
 class UnionJack {
 public:
-    UnionJack( uint length = 10 );
+	UnionJack(unsigned int length = 10);
 
     // Set the xy position.
     UnionJack& position( const ci::vec2 &p );
@@ -45,14 +46,14 @@ public:
     uint16_t valueOf( const char );
 
     // Character dimensions before scaling or slanting.
-    static const uint CHARACTER_HEIGTH = 24;
-    static const uint CHARACTER_WIDTH = 16;
+	static const unsigned int CHARACTER_HEIGTH = 24;
+	static const unsigned int CHARACTER_WIDTH = 16;
 
 protected:
     void        setup();
     ci::mat4    modelMatrix() const;
 
-    uint            mLength; // Number of characters in display
+    unsigned int    mLength; // Number of characters in display
     ci::vec2        mPosition = ci::vec2();
     float           mScale = 1.0f;
     float           mSlant = 0.2f;
