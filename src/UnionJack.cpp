@@ -26,9 +26,9 @@ using namespace std;
 //
 // Awesome font stolen from http://www.msarnoff.org/alpha32/
 // The first 32, non-printable ASCII characters are omitted.
-static const uint CHAR_OFFSET = 32;
-static const uint CHAR_LENGTH = 96;
-static uint16_t charPatterns[CHAR_LENGTH] = {
+static const uint32_t CHAR_OFFSET = 32;
+static const uint32_t CHAR_LENGTH = 96;
+static const uint16_t charPatterns[CHAR_LENGTH] = {
     0x0000,  /*   */ 0x1822,  /* ! */ 0x0880,  /* " */ 0x4b3c,  /* # */
     0x4bbb,  /* $ */ 0xdb99,  /* % */ 0x2d79,  /* & */ 0x1000,  /* ' */
     0x3000,  /* ( */ 0x8400,  /* ) */ 0xff00,  /* * */ 0x4b00,  /* + */
@@ -154,10 +154,10 @@ static const vector<vec3> DISPLAY_VERTS = {
     vec3( 2, 17.7, 1 ), vec3( 6, 14.8, 1 ),  vec3( 5.3, 12, 1 ),
     vec3( 6, 14.8, 1 ), vec3( 5.3, 12, 1 ),  vec3( 6, 12, 1 ),
 };
-static const uint SEGMENTS = 16;
-static const uint VERTS_PER_SEGMENT = 12;
+static const uint32_t SEGMENTS = 16;
+static const uint32_t VERTS_PER_SEGMENT = 12;
 
-UnionJack::UnionJack( uint length )
+UnionJack::UnionJack( size_t length )
 {
     mOnColor = vec4( 1, 0, 0, 1 );
     mOffColor = vec4( 0.25, 0, 0, 1 );
@@ -221,8 +221,8 @@ void UnionJack::setup()
     // Group the verts in each segment using the bone index so the shader knows
     // how to color them.
     vector<int> segmentBones;
-    for ( uint s = 0; s < SEGMENTS; ++s ) {
-        for ( uint v = 0; v < VERTS_PER_SEGMENT; ++v ) {
+    for ( uint32_t s = 0; s < SEGMENTS; ++s ) {
+        for ( uint32_t v = 0; v < VERTS_PER_SEGMENT; ++v ) {
             segmentBones.push_back( s );
         }
     }
@@ -238,7 +238,7 @@ void UnionJack::setup()
     std::vector<vec3> characterPosition;
     std::vector<int> segmentValue;
 
-    for ( uint d = 0; d < length(); ++d ) {
+    for ( size_t d = 0; d < length(); ++d ) {
         characterPosition.push_back( vec3( CHARACTER_WIDTH * d, 0, 0 ) );
         segmentValue.push_back( mBuffer[d] );
     }

@@ -14,7 +14,7 @@
 class UnionJack {
 public:
     // Create a blank display with *length* character.
-    UnionJack( uint length = 10 );
+    UnionJack( size_t length = 10 );
     // Create the display from a string. The length will be based on the string length.
     UnionJack( const std::string &display );
 
@@ -65,8 +65,8 @@ public:
     uint16_t valueOf( const char ) const;
 
     // Character dimensions before scaling or slanting.
-    static const uint CHARACTER_HEIGTH = 24;
-    static const uint CHARACTER_WIDTH = 16;
+    static const uint32_t CHARACTER_HEIGTH = 24;
+    static const uint32_t CHARACTER_WIDTH = 16;
 
 protected:
     void        setup();
