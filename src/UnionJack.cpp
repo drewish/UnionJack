@@ -158,13 +158,26 @@ static const uint SEGMENTS = 16;
 static const uint VERTS_PER_SEGMENT = 12;
 
 UnionJack::UnionJack( uint length )
-    : mLength( length )
 {
     mOnColor = vec4( 1, 0, 0, 1 );
     mOffColor = vec4( 0.25, 0, 0, 1 );
 
+    mBuffer = std::vector<uint16_t>( length, 0 );
+
     setup();
 }
+
+UnionJack::UnionJack( const std::string &s )
+{
+    mOnColor = vec4( 1, 0, 0, 1 );
+    mOffColor = vec4( 0.25, 0, 0, 1 );
+
+    mBuffer = std::vector<uint16_t>( s.length(), 0 );
+    std::transform (s.begin(), s.end(), mBuffer.begin(), [this]( char c ) { return this->valueOf( c ); });
+
+    setup();
+}
+
 
 UnionJack& UnionJack::position( const vec2 &pos )
 {
@@ -225,9 +238,9 @@ void UnionJack::setup()
     std::vector<vec3> characterPosition;
     std::vector<int> segmentValue;
 
-    for ( uint d = 0; d < mLength; ++d ) {
+    for ( uint d = 0; d < length(); ++d ) {
         characterPosition.push_back( vec3( CHARACTER_WIDTH * d, 0, 0 ) );
-        segmentValue.push_back( 0 );
+        segmentValue.push_back( mBuffer[d] );
     }
 
     // TODO: See if we can merge these two VBOs of per instance data. Not clear
@@ -286,22 +299,69 @@ void UnionJack::setup()
     } );
 }
 
-// TODO: would be good to store the string and only update the VBO when the
-// string changes.
-UnionJack& UnionJack::display( string s )
+void UnionJack::updateVBO()
 {
     int *value = (int*)mInstanceValueVbo->mapReplace();
-    for ( uint d = 0, len = s.length(); d < mLength; ++d ) {
-        // When we get to the end of the input, keep going and blank out the
-        // rest of the display.
-        *value++ = valueOf( d < len ? s[d] : ' ' );
+    for ( const uint16_t &v : mBuffer ) {
+        *value++ = v;
     }
     mInstanceValueVbo->unmap();
+}
+
+UnionJack& UnionJack::display( const std::string &s )
+{
+    bool needUpdate = false;
+    size_t len = s.length();
+
+    for ( size_t i = 0; i < length(); ++i ) {
+        // When we get to the end of the input, keep going and blank out the
+        // rest of the display.
+        uint16_t val = valueOf( i < len ? s[i] : ' ' );
+        if ( val != mBuffer[i] ) {
+            mBuffer[i] = val;
+            needUpdate = true;
+        }
+    }
+
+    if ( needUpdate ) updateVBO();
 
     return *this;
 }
 
-uint16_t UnionJack::valueOf( const char input )
+UnionJack& UnionJack::display( const std::vector<uint16_t> &raw_values )
+{
+    // If you're using the raw values you should be matching the buffer size.
+    assert( raw_values.size() <= length() );
+
+    bool needUpdate = false;
+    size_t len = raw_values.size();
+
+    for ( size_t i = 0; i < length(); ++i ) {
+        // When we get to the end of the input, keep going and blank out the
+        // rest of the display.
+        uint16_t val = i < len ? raw_values[i] : 0x0000;
+        if ( val != mBuffer[i] ) {
+            mBuffer[i] = val;
+            needUpdate = true;
+        }
+    }
+
+    if ( needUpdate ) updateVBO();
+
+    return *this;
+}
+
+UnionJack& UnionJack::display( const size_t i, const uint16_t raw_value )
+{
+    if ( raw_value != mBuffer.at( i ) ) {
+        mBuffer[i] = raw_value;
+        updateVBO();
+    }
+
+    return *this;
+}
+
+uint16_t UnionJack::valueOf( const char input ) const
 {
     // If the input is out of range then just return a blank space.
     if ( input < CHAR_OFFSET || input > CHAR_OFFSET + CHAR_LENGTH ) {
@@ -318,7 +378,7 @@ float UnionJack::height() const
 
 float UnionJack::width() const
 {
-    return ( ( CHARACTER_WIDTH * mLength ) + ( CHARACTER_HEIGTH * mSlant ) ) * mScale;
+    return ( ( CHARACTER_WIDTH * length() ) + ( CHARACTER_HEIGTH * mSlant ) ) * mScale;
 }
 
 Rectf UnionJack::calcBoundingBox() const
@@ -333,7 +393,7 @@ void UnionJack::draw() const
 
     mBatch->getGlslProg()->uniform( "offColor", mOffColor );
     mBatch->getGlslProg()->uniform( "onColor", mOnColor );
-    mBatch->drawInstanced( mLength );
+    mBatch->drawInstanced( length() );
 }
 
 mat4 UnionJack::modelMatrix() const
