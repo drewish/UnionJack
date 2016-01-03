@@ -9,6 +9,7 @@
 #ifndef __UnionJack__
 #define __UnionJack__
 
+#include "cinder/gl/gl.h"
 #include "cinder/gl/Vbo.h"
 
 class UnionJack {
